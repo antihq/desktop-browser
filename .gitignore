@@ -22,5 +22,6 @@ Package.resolved
 *.dSYM.zip
 *.dSYM
 
-# Local development artifacts
-screenshots/
+# Local development artifacts (debug captures); App Store hero
+# screenshots in store/screenshots/ ARE committed.
+/screenshots/
