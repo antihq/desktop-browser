@@ -1,68 +1,130 @@
 import SwiftUI
+import WebKit
 
 struct ContentView: View {
     @StateObject private var model = BrowserModel()
     @State private var addressText: String = ""
-    @State private var addressFocusedOnce = false
-    @FocusState private var addressFocused: Bool
+    @State private var addressFocused: Bool = false
 
     @State private var capturedImage: UIImage?
     @State private var showShareSheet = false
     @State private var capturing = false
     @State private var toast: String?
 
+    @State private var showCustomWidthPrompt = false
+    @State private var customWidthText: String = ""
+
+    private let widthPresets: [CGFloat] = [1024, 1280, 1440, 1680, 1920]
+
     var body: some View {
         VStack(spacing: 0) {
-            addressBar
+            toolbar
             progressBar
             DesktopWebView(model: model)
                 .ignoresSafeArea(edges: .bottom)
-            toolbar
         }
-        .overlay(alignment: .top) { toastView }
-        .sheet(isPresented: $showShareSheet) {
-            if let img = capturedImage {
-                ShareSheet(items: [img])
+            .overlay(alignment: .top) { toastView }
+            .sheet(isPresented: $showShareSheet) {
+                if let img = capturedImage {
+                    ShareSheet(items: [img])
+                }
             }
-        }
-        .onChange(of: model.urlString) { _, newValue in
-            if !addressFocused { addressText = newValue }
-        }
-        .onAppear {
-            if addressText.isEmpty { addressText = model.urlString }
-        }
+            .alert("Desktop width", isPresented: $showCustomWidthPrompt) {
+                TextField("Width in pt", text: $customWidthText)
+                    .keyboardType(.numberPad)
+                Button("Cancel", role: .cancel) {}
+                Button("Set") {
+                    if let w = Int(customWidthText), w >= 320 && w <= 10000 {
+                        model.desktopWidth = CGFloat(w)
+                    }
+                }
+            } message: {
+                Text("Enter a width between 320 and 10000 pt.")
+            }
+            .onChange(of: model.urlString) { _, newValue in
+                if !addressFocused { addressText = newValue }
+            }
+            .onAppear {
+                if addressText.isEmpty { addressText = model.urlString }
+            }
     }
 
-    // MARK: - Address bar
+    // MARK: - Toolbar
 
-    private var addressBar: some View {
-        HStack(spacing: 8) {
+    private var toolbar: some View {
+        HStack(spacing: 12) {
+            historyMenu(items: model.backList,
+                        icon: "chevron.backward",
+                        enabled: model.canGoBack,
+                        primary: model.goBack)
+
+            historyMenu(items: model.forwardList,
+                        icon: "chevron.forward",
+                        enabled: model.canGoForward,
+                        primary: model.goForward)
+
+            addressField
+
+            Button {
+                Task { await captureAndShare() }
+            } label: {
+                if capturing {
+                    ProgressView()
+                } else {
+                    Image(systemName: "camera.viewfinder")
+                }
+            }
+            .disabled(capturing)
+
+            widthMenu
+        }
+        .font(.system(size: 15))
+        .padding(.horizontal, 12)
+        .padding(.vertical, 6)
+        .background(.regularMaterial)
+        .overlay(alignment: .bottom) { Divider() }
+    }
+
+    private func historyMenu(
+        items: [WKBackForwardListItem],
+        icon: String,
+        enabled: Bool,
+        primary: @escaping () -> Void
+    ) -> some View {
+        Menu {
+            ForEach(Array(items.enumerated()), id: \.offset) { _, item in
+                Button(item.displayTitle) { model.go(to: item) }
+            }
+        } label: {
+            Image(systemName: icon)
+        } primaryAction: {
+            primary()
+        }
+        .disabled(!enabled)
+    }
+
+    private var addressField: some View {
+        HStack(spacing: 6) {
             Image(systemName: model.urlString.hasPrefix("https") ? "lock.fill" : "globe")
-                .font(.system(size: 13))
+                .font(.system(size: 12))
                 .foregroundStyle(.secondary)
 
-            TextField("Search or enter website", text: $addressText)
-                .textInputAutocapitalization(.never)
-                .autocorrectionDisabled()
-                .keyboardType(.webSearch)
-                .submitLabel(.go)
-                .focused($addressFocused)
-                .onSubmit {
+            URLField(
+                text: $addressText,
+                isFocused: $addressFocused,
+                placeholder: "Search or enter website",
+                onSubmit: {
                     model.load(addressText)
                     addressFocused = false
                 }
-                .onChange(of: addressFocused) { _, focused in
-                    if focused {
-                        // Select-all behavior: show the full URL ready to replace.
-                        addressText = model.urlString
-                    }
-                }
+            )
 
             if addressFocused && !addressText.isEmpty {
                 Button {
                     addressText = ""
                 } label: {
                     Image(systemName: "xmark.circle.fill")
+                        .font(.system(size: 14))
                         .foregroundStyle(.secondary)
                 }
             } else {
@@ -70,15 +132,41 @@ struct ContentView: View {
                     model.reloadOrStop()
                 } label: {
                     Image(systemName: model.isLoading ? "xmark" : "arrow.clockwise")
-                        .font(.system(size: 14))
+                        .font(.system(size: 13))
                 }
             }
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
-        .background(.regularMaterial)
-        .overlay(alignment: .bottom) {
+        .toolbarPill(RoundedRectangle(cornerRadius: 8, style: .continuous))
+    }
+
+    private var widthMenu: some View {
+        Menu {
+            ForEach(widthPresets, id: \.self) { w in
+                Button {
+                    model.desktopWidth = w
+                } label: {
+                    if w == model.desktopWidth {
+                        Label("\(Int(w)) pt", systemImage: "checkmark")
+                    } else {
+                        Text("\(Int(w)) pt")
+                    }
+                }
+            }
             Divider()
+            Button("Custom…") {
+                customWidthText = String(Int(model.desktopWidth))
+                showCustomWidthPrompt = true
+            }
+        } label: {
+            HStack(spacing: 2) {
+                Text("\(Int(model.desktopWidth))")
+                    .font(.system(size: 13, weight: .semibold, design: .rounded))
+                    .monospacedDigit()
+                Image(systemName: "chevron.down")
+                    .font(.system(size: 9, weight: .bold))
+            }
+            .foregroundStyle(.primary)
+            .toolbarPill(Capsule())
         }
     }
 
@@ -93,59 +181,6 @@ struct ContentView: View {
         }
         .frame(height: 2)
     }
-
-    // MARK: - Bottom toolbar
-
-    private var toolbar: some View {
-        HStack {
-            Button(action: model.goBack) {
-                Image(systemName: "chevron.backward")
-            }
-            .disabled(!model.canGoBack)
-
-            Spacer()
-
-            Button(action: model.goForward) {
-                Image(systemName: "chevron.forward")
-            }
-            .disabled(!model.canGoForward)
-
-            Spacer()
-
-            Button {
-                Task { await captureAndShare() }
-            } label: {
-                if capturing {
-                    ProgressView()
-                } else {
-                    Image(systemName: "camera.viewfinder")
-                }
-            }
-            .disabled(capturing)
-
-            Spacer()
-
-            Button {
-                Task { await captureToPhotos() }
-            } label: {
-                Image(systemName: "square.and.arrow.down")
-            }
-            .disabled(capturing)
-
-            Spacer()
-
-            Button(action: model.loadHome) {
-                Image(systemName: "house")
-            }
-        }
-        .font(.system(size: 20))
-        .padding(.horizontal, 28)
-        .padding(.vertical, 10)
-        .background(.regularMaterial)
-        .overlay(alignment: .top) { Divider() }
-    }
-
-    // MARK: - Toast
 
     @ViewBuilder private var toastView: some View {
         if let toast {
@@ -163,12 +198,10 @@ struct ContentView: View {
     private func flash(_ message: String) {
         withAnimation { toast = message }
         Task {
-            try? await Task.sleep(nanoseconds: 1_800_000_000)
+            try? await Task.sleep(for: .milliseconds(1800))
             withAnimation { toast = nil }
         }
     }
-
-    // MARK: - Screenshot actions
 
     private func captureAndShare() async {
         capturing = true
@@ -180,16 +213,21 @@ struct ContentView: View {
         capturedImage = image
         showShareSheet = true
     }
+}
 
-    private func captureToPhotos() async {
-        capturing = true
-        defer { capturing = false }
-        guard let image = await model.captureScreenshot() else {
-            flash("Couldn't capture page")
-            return
-        }
-        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-        flash("Saved to Photos")
+private struct ToolbarPill<S: Shape>: ViewModifier {
+    let shape: S
+    func body(content: Content) -> some View {
+        content
+            .padding(.horizontal, 8)
+            .padding(.vertical, 5)
+            .background(shape.fill(.quaternary.opacity(0.5)))
+    }
+}
+
+private extension View {
+    func toolbarPill<S: Shape>(_ shape: S) -> some View {
+        modifier(ToolbarPill(shape: shape))
     }
 }
 

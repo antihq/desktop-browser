@@ -23,8 +23,8 @@ final class BrowserModel: ObservableObject {
 
     /// The desktop width the page is laid out at, in points. 1280 is the
     /// classic desktop breakpoint that triggers full desktop layouts on
-    /// virtually every responsive site.
-    let desktopWidth: CGFloat = 1280
+    /// virtually every responsive site. User-adjustable from the toolbar.
+    @Published var desktopWidth: CGFloat = 1280
 
     /// Safari 17 macOS UA — makes sites serve their desktop experience.
     private let desktopUserAgent =
@@ -45,6 +45,10 @@ final class BrowserModel: ObservableObject {
         wv.customUserAgent = desktopUserAgent
         wv.allowsBackForwardNavigationGestures = true
         wv.isInspectable = true
+        // We host the web view edge-to-edge under the status bar; don't let
+        // WebKit add a top safe-area inset that produces a blank strip above
+        // the page content.
+        wv.scrollView.contentInsetAdjustmentBehavior = .never
         self.webView = wv
 
         observe()
@@ -107,6 +111,23 @@ final class BrowserModel: ObservableObject {
     func goBack() { webView.goBack() }
     func goForward() { webView.goForward() }
 
+    // MARK: - History
+
+    /// Back history in reverse chronological order (most recent first), which
+    /// is the order Safari shows in its long-press history menu.
+    var backList: [WKBackForwardListItem] {
+        webView.backForwardList.backList.reversed()
+    }
+
+    /// Forward history in the order it would be re-visited.
+    var forwardList: [WKBackForwardListItem] {
+        webView.backForwardList.forwardList
+    }
+
+    func go(to item: WKBackForwardListItem) {
+        webView.go(to: item)
+    }
+
     func reloadOrStop() {
         if isLoading { webView.stopLoading() } else { webView.reload() }
     }
@@ -134,5 +155,14 @@ final class BrowserModel: ObservableObject {
                 continuation.resume(returning: image)
             }
         }
+    }
+}
+
+extension WKBackForwardListItem {
+    /// Page title if present, otherwise the URL — used as the label in the
+    /// long-press history menu.
+    var displayTitle: String {
+        if let t = title, !t.isEmpty { return t }
+        return url.absoluteString
     }
 }
