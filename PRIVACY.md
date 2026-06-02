@@ -2,8 +2,8 @@
 
 **Effective date:** 2026-06-02
 
-Desktop Browser (the "app") is a free, open-source iOS web browser published
-by Gumroad, Inc.
+Desktop Browser for iOS (the "app") is a free, open-source iOS web browser
+published by Gumroad, Inc.
 
 ## What we collect
 

@@ -2,7 +2,7 @@ You shipped a desktop site. Your phone won't show it to you.
 
 Mobile Safari's "Request Desktop Site" only swaps the user agent — your site still lays out at phone width. The desktop CSS you wrote? Never evaluates. The breakpoints you tuned? Bypassed. Whatever your design system does at ≥768px? Invisible from your phone.
 
-Desktop Browser actually renders pages at a true desktop viewport (1280pt by default, adjustable from 320 to 10000), scales them to fit your phone, and serves a real desktop Safari user-agent. Same engine as Safari (WKWebView). The page sees a desktop. You see the page.
+Desktop Browser for iOS actually renders pages at a true desktop viewport (1280pt by default, adjustable from 320 to 10000), scales them to fit your iPhone or iPad, and serves a real desktop Safari user-agent. Same engine as Safari (WKWebView). The page sees a desktop. You see the page.
 
 WHO IT'S FOR
 • Web developers who want to preview their own site at desktop breakpoints from their phone

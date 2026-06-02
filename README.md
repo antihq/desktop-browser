@@ -1,4 +1,4 @@
-# Desktop Browser
+# Desktop Browser for iOS
 
 **You shipped a desktop site. Your phone won't show it to you.**
 
