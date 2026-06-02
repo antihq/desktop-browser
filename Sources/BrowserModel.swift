@@ -35,6 +35,14 @@ final class BrowserModel: ObservableObject {
 
     private var observations: [NSKeyValueObservation] = []
 
+    #if DEBUG
+    /// When set via env var DBR_AUTOCAPTURE=1, the first time a page finishes
+    /// loading the model snapshots the full scrollable content and writes
+    /// it to Documents/full-page.png. Used to pull true full-page screenshots
+    /// out of the simulator for marketing material.
+    private var pendingAutoCapture = ProcessInfo.processInfo.environment["DBR_AUTOCAPTURE"] == "1"
+    #endif
+
     init() {
         let config = WKWebViewConfiguration()
         config.defaultWebpagePreferences.preferredContentMode = .desktop
@@ -69,7 +77,14 @@ final class BrowserModel: ObservableObject {
                 Task { @MainActor in self?.canGoForward = wv.canGoForward }
             },
             webView.observe(\.isLoading, options: [.initial, .new]) { [weak self] wv, _ in
-                Task { @MainActor in self?.isLoading = wv.isLoading }
+                Task { @MainActor in
+                    self?.isLoading = wv.isLoading
+                    #if DEBUG
+                    if wv.isLoading == false {
+                        await self?.maybeAutoCapture()
+                    }
+                    #endif
+                }
             },
             webView.observe(\.estimatedProgress, options: [.new]) { [weak self] wv, _ in
                 Task { @MainActor in self?.progress = wv.estimatedProgress }
@@ -163,6 +178,22 @@ final class BrowserModel: ObservableObject {
         }
     }
 }
+
+#if DEBUG
+extension BrowserModel {
+    /// Capture once, then write the full-page screenshot to Documents.
+    func maybeAutoCapture() async {
+        guard pendingAutoCapture else { return }
+        pendingAutoCapture = false
+        try? await Task.sleep(for: .seconds(3))
+        guard let img = await captureScreenshot(),
+              let data = img.pngData() else { return }
+        let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let url = docs.appendingPathComponent("full-page.png")
+        try? data.write(to: url)
+    }
+}
+#endif
 
 extension WKBackForwardListItem {
     /// Page title if present, otherwise the URL — used as the label in the
