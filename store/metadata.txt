@@ -115,10 +115,9 @@ APP REVIEW INFORMATION (bottom of version page)
 Sign-in required: UNCHECK (app has no login)
 
 --- Contact Information ---
-First name:    Sahil
-Last name:     Lavingia
-Phone number:  <your phone>
-Email address: sahil.lavingia@gmail.com
+(provided directly to App Review in App Store Connect — not stored
+in this repo. App Reviewers need a real contact name, phone, and
+email to reach the developer if there's a question.)
 
 --- Notes (4,000 char max) ---
 Desktop Browser renders web pages at a true desktop viewport (1280pt by default) and scales them to fit the device. To test:

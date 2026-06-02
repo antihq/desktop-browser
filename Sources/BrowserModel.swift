@@ -44,7 +44,13 @@ final class BrowserModel: ObservableObject {
         let wv = WKWebView(frame: .zero, configuration: config)
         wv.customUserAgent = desktopUserAgent
         wv.allowsBackForwardNavigationGestures = true
+        // Remote Safari Web Inspector debugging — debug builds only. In a
+        // Release / App Store build this would let anyone with physical USB
+        // access to an unlocked, paired iPhone read DOM, cookies, and
+        // localStorage of every site the user is logged into via the app.
+        #if DEBUG
         wv.isInspectable = true
+        #endif
         // We host the web view edge-to-edge under the status bar; don't let
         // WebKit add a top safe-area inset that produces a blank strip above
         // the page content.

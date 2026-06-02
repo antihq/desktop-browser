@@ -91,3 +91,7 @@ Two independent levers, both applied:
   <img src="store/screenshots/ipad-github-dark.png" width="320" alt="GitHub on iPad in dark mode">
 </p>
 
+## License
+
+MIT — see [LICENSE](LICENSE).
+
