@@ -1,7 +1,15 @@
 # Desktop Browser
 
-**See websites at real desktop resolution on iPhone and iPad.** Adjustable
-viewport, true desktop CSS, one-tap full-page screenshot to share.
+**You shipped a desktop site. Your phone won't show it to you.**
+
+Mobile Safari's "Request Desktop Site" only swaps the user agent — your
+site still lays out at phone width. The desktop CSS you wrote never
+evaluates; the features SaaS dashboards hide on mobile stay hidden.
+
+Desktop Browser renders pages at a true desktop viewport (adjustable,
+default 1280pt), scales them to fit your phone, and serves a real
+desktop Safari user-agent. Same engine as Safari. The page sees a
+desktop. You see the page.
 
 <p align="center">
   <img src="store/screenshots/iphone-apple-light.png" width="240" alt="Apple.com at full desktop layout on iPhone">
@@ -9,17 +17,17 @@ viewport, true desktop CSS, one-tap full-page screenshot to share.
   <img src="store/screenshots/iphone-github-landscape.png" width="480" alt="Landscape view">
 </p>
 
-## Why
+## Who it's for
 
-Mobile Safari's "Request Desktop Site" only swaps the user-agent — the page
-still lays out at phone width, so responsive sites serve a half-broken hybrid
-that isn't the real desktop experience.
-
-Desktop Browser actually renders pages at a true **1280pt desktop viewport**
-(adjustable from 320 to 10000), scales them to fit your device, and serves a
-real desktop Safari user-agent. CSS breakpoints evaluate against a
-desktop-class viewport — so the page picks its desktop layout, the way it
-would on a Mac.
+- **Web developers** previewing their own site at desktop breakpoints
+  from a phone, without walking back to a Mac
+- Anyone who's hit "this feature is hidden on mobile" — Merge buttons
+  on GitHub PRs, deploy logs on Vercel, transaction details on Stripe,
+  admin panels on Notion, settings deep in Linear, dashboards on AWS
+- Reading full desktop versions of articles, docs, and reference pages
+  without the dumbed-down mobile layout
+- Capturing full-page screenshots — entire scrollable canvas, not just
+  the viewport
 
 ## Features
 

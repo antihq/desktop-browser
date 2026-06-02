@@ -1,25 +1,26 @@
-Mobile Safari's "Request Desktop Site" only swaps the user-agent — the page still lays out at phone width, so responsive sites serve a half-broken hybrid.
+You shipped a desktop site. Your phone won't show it to you.
 
-Desktop Browser actually renders pages at a true desktop viewport (1280pt by default, adjustable 320–10000), scales them to fit your phone, and serves a real desktop Safari user-agent. You see what the site looks like on a Mac.
+Mobile Safari's "Request Desktop Site" only swaps the user agent — your site still lays out at phone width. The desktop CSS you wrote? Never evaluates. The breakpoints you tuned? Bypassed. Whatever your design system does at ≥768px? Invisible from your phone.
 
-WHY USE IT
-• Read full desktop versions of news sites, docs, and dashboards without the dumbed-down mobile layout
-• Capture full-page screenshots of any page — the entire scrollable canvas, not just the visible viewport
-• Quickly check how your own website looks at desktop breakpoints from your phone
-• Browse sites that hide features behind their mobile UI
+Desktop Browser actually renders pages at a true desktop viewport (1280pt by default, adjustable from 320 to 10000), scales them to fit your phone, and serves a real desktop Safari user-agent. Same engine as Safari (WKWebView). The page sees a desktop. You see the page.
+
+WHO IT'S FOR
+• Web developers who want to preview their own site at desktop breakpoints from their phone
+• Anyone who's hit "this feature is hidden on mobile" — Merge buttons on GitHub PRs, deploy logs on Vercel, transaction details on Stripe, admin panels on Notion, settings deep in Linear, dashboards on AWS, the half of the UI a SaaS hides behind their mobile fallback
+• Reading full desktop articles without the dumbed-down mobile layout, ads-first reflow, or "open in app" interstitial
+• Capturing full-page screenshots — the entire scrollable canvas, not just the viewport
+• Anyone who has ever thought "I just want the actual website"
 
 FEATURES
 • True desktop layout — CSS breakpoints evaluate against a desktop viewport, not your phone
 • Adjustable resolution — pick a preset (1024, 1280, 1440, 1680, 1920) or set any custom width up to 10000
-• One-tap full-page screenshot — capture the entire scrollable page, share via Messages, Mail, AirDrop, or save to Photos
+• One-tap full-page screenshot — capture the entire scrollable page and share via Messages, Mail, AirDrop, or save to Photos
 • Long-press back/forward for full navigation history
 • Safari-style URL bar with tap-to-select-all
-• Light and dark mode
-• Portrait and landscape
-• Edge-swipe back/forward gestures
+• Light and dark mode, portrait and landscape, edge-swipe back/forward
 
 PRIVATE BY DESIGN
 No accounts. No ads. No tracking. No analytics. No servers. All browsing happens locally via WKWebView — same engine as Safari.
 
 OPEN SOURCE
-github.com/antiwork/desktop-browser
+MIT licensed: github.com/antiwork/desktop-browser

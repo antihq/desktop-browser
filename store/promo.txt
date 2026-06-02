@@ -1,1 +1,1 @@
-See sites at real desktop resolution on iPhone. Adjustable viewport, true desktop CSS, one-tap full-page screenshot to share.
+You shipped a desktop site. Your phone won't show it to you. Desktop Browser does — real desktop layout, adjustable viewport, full-page screenshots.
