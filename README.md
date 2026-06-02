@@ -1,27 +1,45 @@
 # Desktop Browser
 
-A minimal iOS browser that renders websites at **desktop resolution** — not just a mobile page with a desktop user-agent string — and makes it effortless to **capture and share full-page screenshots**.
+**See websites at real desktop resolution on iPhone and iPad.** Adjustable
+viewport, true desktop CSS, one-tap full-page screenshot to share.
+
+<p align="center">
+  <img src="store/screenshots/iphone-apple-light.png" width="240" alt="Apple.com at full desktop layout on iPhone">
+  <img src="store/screenshots/iphone-github-dark.png" width="240" alt="GitHub in dark mode at desktop layout">
+  <img src="store/screenshots/iphone-github-landscape.png" width="480" alt="Landscape view">
+</p>
 
 ## Why
 
-Mobile Safari's "Request Desktop Site" flips the user-agent but still lays the
-page out at phone width, so responsive sites often serve a hybrid that isn't
-the real desktop experience. Desktop Browser lays each page out at a true
-**1280pt desktop viewport** and scales that surface to fit your device, so
-sites pick their desktop breakpoints and you see the full desktop layout.
+Mobile Safari's "Request Desktop Site" only swaps the user-agent — the page
+still lays out at phone width, so responsive sites serve a half-broken hybrid
+that isn't the real desktop experience.
+
+Desktop Browser actually renders pages at a true **1280pt desktop viewport**
+(adjustable from 320 to 10000), scales them to fit your device, and serves a
+real desktop Safari user-agent. CSS breakpoints evaluate against a
+desktop-class viewport — so the page picks its desktop layout, the way it
+would on a Mac.
 
 ## Features
 
-- **True desktop layout** — pages render at a fixed 1280pt width and are
+- **True desktop layout** — pages render at a fixed desktop width and are
   visually scaled to fit, combined with a desktop Safari user-agent and
-  `.desktop` content mode.
-- **Address bar** — type a URL or a search query; bare domains get `https://`,
-  everything else becomes a Google search.
-- **Navigation** — back/forward (incl. edge-swipe gestures), reload/stop, home,
-  and a live page-load progress bar.
-- **One-tap screenshot → share** — capture the full scrollable page and send it
-  through the native iOS share sheet (Messages, Mail, AirDrop, etc.).
-- **Save to Photos** — capture straight to your photo library.
+  `.desktop` content mode
+- **Adjustable resolution** — pick a preset (1024 / 1280 / 1440 / 1680 / 1920)
+  or set any custom width up to 10000
+- **One-tap full-page screenshot** — capture the entire scrollable page
+  and share via Messages, Mail, AirDrop, or save to Photos
+- **Long-press back/forward for full navigation history**
+- **Safari-style URL bar** with tap-to-select-all
+- **Light and dark mode**, portrait and landscape
+- **Edge-swipe back/forward gestures**
+
+## Privacy
+
+No accounts, no ads, no tracking, no analytics, no servers. All browsing
+happens locally via `WKWebView` — the same engine as Safari. See
+[PRIVACY.md](PRIVACY.md).
 
 ## Build
 
@@ -49,8 +67,11 @@ xcodebuild -project DesktopBrowser.xcodeproj -scheme DesktopBrowser \
 | `Sources/DesktopBrowserApp.swift` | App entry point |
 | `Sources/BrowserModel.swift` | Owns the `WKWebView`, navigation state, desktop UA, and screenshot capture |
 | `Sources/DesktopWebView.swift` | `UIViewRepresentable` that lays the web view out at desktop width and scales it to fit |
-| `Sources/ContentView.swift` | Address bar, progress bar, and bottom toolbar |
+| `Sources/ContentView.swift` | Single combined toolbar with back/forward, URL, screenshot, and resolution |
+| `Sources/URLField.swift` | `UITextField`-backed URL field for native gestures and Safari-style select-all |
 | `Sources/ShareSheet.swift` | Native `UIActivityViewController` wrapper |
+| `Resources/Assets.xcassets/` | App icon |
+| `store/` | App Store metadata, copy, and screenshots |
 
 ## How desktop layout works
 
@@ -58,6 +79,15 @@ Two independent levers, both applied:
 
 1. **User-agent + content mode** — a macOS Safari UA string and
    `preferredContentMode = .desktop` make servers send the desktop variant.
-2. **Desktop-width rendering** — the web view is sized to 1280pt wide and a
-   `CGAffineTransform` scales it down to the device width, so responsive CSS
-   evaluates against a desktop-class viewport. See `DesktopWebView.ContainerView`.
+2. **Desktop-width rendering** — the web view is sized to the user's chosen
+   desktop width (e.g. 1280pt) and a `CGAffineTransform` scales it down to
+   the device width, so responsive CSS evaluates against a desktop-class
+   viewport. See `DesktopWebView.ContainerView`.
+
+## Screenshots (iPad)
+
+<p align="center">
+  <img src="store/screenshots/ipad-apple-light.png" width="320" alt="Apple.com on iPad at desktop layout">
+  <img src="store/screenshots/ipad-github-dark.png" width="320" alt="GitHub on iPad in dark mode">
+</p>
+

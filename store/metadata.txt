@@ -1,0 +1,170 @@
+=========================================================
+APP STORE CONNECT — COMPLETE METADATA FOR DESKTOP BROWSER
+Copy-paste each value into the corresponding field.
+=========================================================
+
+
+=========================================================
+SIDEBAR: APP INFORMATION
+=========================================================
+
+Subtitle:
+Real desktop sites + share
+
+Category (Primary):
+Utilities
+
+Category (Secondary):
+Productivity
+
+Content Rights:
+Does Your App Contain, Display, or Access Third-Party Content? → NO
+(WKWebView renders sites the user navigates to; this is user-initiated browsing, not embedded third-party content owned by you.)
+
+Age Rating:
+Click "Edit" → answer all questions "None" EXCEPT:
+- "Unrestricted Web Access" → YES
+→ Final rating will be 17+
+
+
+=========================================================
+SIDEBAR: PRICING AND AVAILABILITY
+=========================================================
+
+Price: USD 0 (Free)
+Availability: All countries and regions (leave default — all checked)
+Distribution Methods: Public on the App Store
+
+
+=========================================================
+SIDEBAR: APP PRIVACY
+=========================================================
+
+Data Collection question:
+"Do you or your third-party partners collect data from this app?"
+→ NO
+
+(That's it. No further questions. Save.)
+
+
+=========================================================
+MAIN VERSION PAGE (1.0)
+=========================================================
+
+--- Promotional Text (170 char max) ---
+See sites at real desktop resolution on iPhone. Adjustable viewport, true desktop CSS, one-tap full-page screenshot to share.
+
+--- Description (4,000 char max) ---
+Mobile Safari's "Request Desktop Site" only swaps the user-agent — the page still lays out at phone width, so responsive sites serve a half-broken hybrid.
+
+Desktop Browser actually renders pages at a true desktop viewport (1280pt by default, adjustable 320–10000), scales them to fit your phone, and serves a real desktop Safari user-agent. You see what the site looks like on a Mac.
+
+WHY USE IT
+• Read full desktop versions of news sites, docs, and dashboards without the dumbed-down mobile layout
+• Capture full-page screenshots of any page — the entire scrollable canvas, not just the visible viewport
+• Quickly check how your own website looks at desktop breakpoints from your phone
+• Browse sites that hide features behind their mobile UI
+
+FEATURES
+• True desktop layout — CSS breakpoints evaluate against a desktop viewport, not your phone
+• Adjustable resolution — pick a preset (1024, 1280, 1440, 1680, 1920) or set any custom width up to 10000
+• One-tap full-page screenshot — capture the entire scrollable page, share via Messages, Mail, AirDrop, or save to Photos
+• Long-press back/forward for full navigation history
+• Safari-style URL bar with tap-to-select-all
+• Light and dark mode
+• Portrait and landscape
+• Edge-swipe back/forward gestures
+
+PRIVATE BY DESIGN
+No accounts. No ads. No tracking. No analytics. No servers. All browsing happens locally via WKWebView — same engine as Safari.
+
+OPEN SOURCE
+github.com/antiwork/desktop-browser
+
+--- Keywords (100 char max, comma-separated, no spaces) ---
+desktop,browser,web,screenshot,viewport,responsive,share,fullpage,wide,safari
+
+--- Support URL ---
+https://github.com/antiwork/desktop-browser/issues
+
+--- Marketing URL (optional) ---
+https://github.com/antiwork/desktop-browser
+
+--- Version ---
+1.0
+
+--- Copyright ---
+© 2026 Gumroad, Inc.
+
+--- Routing App Coverage File ---
+(leave blank — N/A)
+
+--- App Clip / iMessage App ---
+(leave blank — N/A)
+
+--- Build ---
+After upload finishes processing (~10 min from now), refresh the page, click
+"Add Build", and pick 1.0 (1).
+
+
+=========================================================
+APP REVIEW INFORMATION (bottom of version page)
+=========================================================
+
+--- Sign-In Information ---
+Sign-in required: UNCHECK (app has no login)
+
+--- Contact Information ---
+First name:    Sahil
+Last name:     Lavingia
+Phone number:  <your phone>
+Email address: sahil.lavingia@gmail.com
+
+--- Notes (4,000 char max) ---
+Desktop Browser renders web pages at a true desktop viewport (1280pt by default) and scales them to fit the device. To test:
+
+1. Launch the app — it loads google.com at desktop layout.
+2. Tap the URL bar, enter any URL (try wikipedia.org or apple.com) — page renders at desktop resolution, not mobile.
+3. Tap the "1,280" pill in the toolbar to change viewport width (presets 1024–1920 or custom up to 10000).
+4. Tap the camera icon to capture a full-page screenshot and share via the iOS share sheet.
+5. Long-press back/forward arrows to see navigation history.
+
+The app uses only WKWebView for browsing. No accounts, no tracking, no network calls beyond the user-initiated page loads.
+
+--- Attachment ---
+(skip — optional)
+
+
+=========================================================
+EXPORT COMPLIANCE
+=========================================================
+
+When you select the build, App Store Connect asks about encryption.
+
+Question: "Does your app use encryption?"
+→ YES (HTTPS counts as encryption)
+
+Follow-up: "Does your app qualify for any of the exemptions provided in
+Category 5, Part 2 of the U.S. Export Administration Regulations?"
+→ YES
+
+Follow-up: "Does your app meet any of the following:
+(a) Uses only encryption that is built into iOS
+(b) Makes calls over HTTPS"
+→ YES — check (a) and/or (b)
+
+(This is the standard "uses-only-Apple-encryption" exemption that applies to
+any iOS app that just uses HTTPS via WKWebView. No documentation required.)
+
+
+=========================================================
+APP STORE VERSION RELEASE
+=========================================================
+
+Pick: "Automatically release this version"
+(So the moment Apple approves, the app goes live without you having to click again.)
+
+
+=========================================================
+DONE — click "Add for Review" → "Submit to App Review"
+=========================================================

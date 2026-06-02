@@ -1,0 +1,25 @@
+Mobile Safari's "Request Desktop Site" only swaps the user-agent — the page still lays out at phone width, so responsive sites serve a half-broken hybrid.
+
+Desktop Browser actually renders pages at a true desktop viewport (1280pt by default, adjustable 320–10000), scales them to fit your phone, and serves a real desktop Safari user-agent. You see what the site looks like on a Mac.
+
+WHY USE IT
+• Read full desktop versions of news sites, docs, and dashboards without the dumbed-down mobile layout
+• Capture full-page screenshots of any page — the entire scrollable canvas, not just the visible viewport
+• Quickly check how your own website looks at desktop breakpoints from your phone
+• Browse sites that hide features behind their mobile UI
+
+FEATURES
+• True desktop layout — CSS breakpoints evaluate against a desktop viewport, not your phone
+• Adjustable resolution — pick a preset (1024, 1280, 1440, 1680, 1920) or set any custom width up to 10000
+• One-tap full-page screenshot — capture the entire scrollable page, share via Messages, Mail, AirDrop, or save to Photos
+• Long-press back/forward for full navigation history
+• Safari-style URL bar with tap-to-select-all
+• Light and dark mode
+• Portrait and landscape
+• Edge-swipe back/forward gestures
+
+PRIVATE BY DESIGN
+No accounts. No ads. No tracking. No analytics. No servers. All browsing happens locally via WKWebView — same engine as Safari.
+
+OPEN SOURCE
+github.com/antiwork/desktop-browser
