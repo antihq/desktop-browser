@@ -1,6 +1,6 @@
 name: DesktopBrowser
 options:
-  bundleIdPrefix: com.gumroad.desktopbrowser
+  bundleIdPrefix: com.antiwork.desktopbrowser
   deploymentTarget:
     iOS: "17.0"
   developmentLanguage: en
@@ -25,5 +25,5 @@ targets:
       - Resources
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.gumroad.desktopbrowser
+        PRODUCT_BUNDLE_IDENTIFIER: com.antiwork.desktopbrowser
         CODE_SIGN_STYLE: Automatic
