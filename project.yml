@@ -25,5 +25,5 @@ targets:
       - Resources
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.gumroad.desktopbrowser
+        PRODUCT_BUNDLE_IDENTIFIER: com.oliver.desktopbrowser
         CODE_SIGN_STYLE: Automatic

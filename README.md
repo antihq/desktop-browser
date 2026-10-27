@@ -99,6 +99,41 @@ xcodebuild -project DesktopBrowser.xcodeproj -scheme DesktopBrowser \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro' build
 ```
 
+## Keeping it installed (free Apple ID)
+
+Development installs signed with a free Apple ID stop launching after
+7 days — Apple's rule, not a bug in the app. Refreshing is one command:
+
+```sh
+scripts/refresh-app.sh   # iPhone plugged in via USB and unlocked
+```
+
+It finds your phone, rebuilds with a fresh provisioning profile,
+reinstalls, and relaunches the app. The one-time "trust this developer"
+step (Settings → General → VPN & Device Management) is only needed
+after the first install or a new signing certificate, not every refresh.
+
+A paid Apple Developer Program membership extends development installs
+to a year; App Store builds never expire.
+
+### Fully automatic (launchd)
+
+`scripts/auto-refresh.sh` refreshes only when the profile is 5+ days
+old, and a launchd agent triggers it at 10:00 and 20:00 daily — so
+your phone's app renews itself whenever it's unlocked and on the same
+Wi-Fi, with roughly twice-a-week actual reinstalls and automatic retry
+on missed attempts. One-time setup:
+
+```sh
+cp scripts/com.oliver.desktopbrowser.refresh.plist ~/Library/LaunchAgents/
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.oliver.desktopbrowser.refresh.plist
+```
+
+Log: `~/Library/Logs/DesktopBrowser-refresh.log`. Uninstall with
+`launchctl bootout gui/$(id -u)/com.oliver.desktopbrowser.refresh`.
+Note: the plist hard-codes this repo's path — update it if you move
+the repo.
+
 ## Project layout
 
 | Path | Purpose |
@@ -111,6 +146,7 @@ xcodebuild -project DesktopBrowser.xcodeproj -scheme DesktopBrowser \
 | `Sources/URLField.swift` | `UITextField`-backed URL field for native gestures and Safari-style select-all |
 | `Sources/ShareSheet.swift` | Native `UIActivityViewController` wrapper |
 | `Resources/Assets.xcassets/` | App icon |
+| `scripts/` | `refresh-app.sh` (manual one-command refresh), `auto-refresh.sh` + launchd plist (automatic) |
 | `store/` | App Store metadata, copy, and screenshots |
 
 ## How desktop layout works
