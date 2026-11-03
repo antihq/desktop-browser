@@ -58,6 +58,7 @@ xcodebuild \
     -project DesktopBrowser.xcodeproj \
     -scheme DesktopBrowser \
     -destination "platform=iOS,id=$UDID" \
+    -destination-timeout 60 \
     -derivedDataPath build/phone \
     -allowProvisioningUpdates \
     -quiet build
@@ -69,8 +70,11 @@ echo "==> Installing on $PHONE_NAME..."
 xcrun devicectl device install app --device "$UDID" "$APP" >/dev/null
 
 # ---------------------------------------------------------------- launch
+# Best-effort: a locked phone can refuse launch even though the install
+# (the part that actually refreshes the profile) succeeded.
 echo "==> Launching..."
-xcrun devicectl device process launch --device "$UDID" "$BUNDLE_ID" >/dev/null
+xcrun devicectl device process launch --device "$UDID" "$BUNDLE_ID" >/dev/null \
+    || echo "⚠️  Installed OK but couldn't launch (phone locked?) — profile refreshed regardless."
 
 echo "✅ Done — profile clock reset for another 7 days."
 echo "   Tip: run this every Monday, or whenever you think of it."
