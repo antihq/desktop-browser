@@ -134,6 +134,13 @@ Log: `~/Library/Logs/DesktopBrowser-refresh.log`. Uninstall with
 Note: the plist hard-codes this repo's path — update it if you move
 the repo.
 
+**If the app stops launching before its time:** check the log first.
+`No Accounts: Add a new account in Accounts settings` means Xcode
+lost its Apple ID session (Settings → Accounts → re-add it) — until
+fixed, "refreshes" silently reuse the old, dying profile. After
+re-adding, run `scripts/refresh-app.sh` once and re-trust the
+developer on the phone if asked.
+
 ## Project layout
 
 | Path | Purpose |
